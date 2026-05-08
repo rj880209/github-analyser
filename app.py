@@ -10,6 +10,15 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+# Security headers via meta tags (mitigates XSS, clickjacking, MIME sniffing)
+st.markdown("""
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+<meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
+<meta name="Content-Security-Policy" content="default-src \'self\' fonts.googleapis.com fonts.gstatic.com; style-src \'self\' \'unsafe-inline\' fonts.googleapis.com; script-src \'self\' \'unsafe-inline\'">
+""", unsafe_allow_html=True)
+
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');

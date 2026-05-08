@@ -96,10 +96,15 @@ class GitHubClient:
         """
         blobs = [e["path"] for e in tree if e.get("type") == "blob"]
 
-        # Exact priority matches
+        # Exact priority matches — fixed: use precise matching to avoid
+        # false positives e.g. "Makefile" wrongly matching "Makefile.win"
         selected: list[str] = []
         for pf in PRIORITY_FILES:
-            matches = [b for b in blobs if b == pf or b.endswith("/" + pf) or b.startswith(pf)]
+            matches = [
+                b for b in blobs
+                if b == pf                   # exact root-level match
+                or b.endswith("/" + pf)      # file nested in a subdirectory
+            ]
             selected.extend(m for m in matches if m not in selected)
 
         # Fill remaining slots with source files (shortest paths first)
